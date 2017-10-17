@@ -328,8 +328,10 @@ public final class UniqueId implements UniqueIdInterface {
       found = id_cache.putIfAbsent(key, name);
     }
     if (found != null && !found.equals(name)) {
+      byte[] foundId = name_cache.get(found);
       throw new IllegalStateException("id=" + Arrays.toString(id) + " => name="
-          + name + ", already mapped to " + found);
+          + name + ", already mapped to " + found + ". ##The name_cache is name=" + found
+              + "=> id=" + Arrays.toString(foundId));
     }
   }
 
@@ -387,9 +389,11 @@ public final class UniqueId implements UniqueIdInterface {
                                     Arrays.copyOf(id, id.length));
     }
     if (found != null && !Arrays.equals(found, id)) {
+      String foundName = id_cache.get(fromBytes(found));
       throw new IllegalStateException("name=" + name + " => id="
           + Arrays.toString(id) + ", already mapped to "
-          + Arrays.toString(found));
+          + Arrays.toString(found)  + ". ##The id_cache is id=" + Arrays.toString(found)
+              + "=> name=" + foundName);
     }
   }
 
